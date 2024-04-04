@@ -1,0 +1,232 @@
+class Programm
+{
+
+    static void Main()
+    {
+
+        int o;
+        int g;
+        string a;
+        string k;
+        string c;
+        string v;
+        int Count;
+        Count = 0;
+        a = "крестика";
+        k = " нолика";
+
+        Console.WriteLine("Добро пожаловать в  игру крестики нолики");
+        Console.WriteLine("За кого вы будете играть? ( за нолика или крестика)");
+        c = Console.ReadLine();
+        if ( a == c)
+        {
+            Console.WriteLine("Вы теперь играете за крестика");
+            v = " крестика ";
+
+        }
+        else
+        {
+            Console.WriteLine("Вы теперь играете за нолика");
+            v = "нолика";
+        }
+        int[,] values = new int[3, 3];
+
+        while (true)
+        {
+           
+            kartochka_show(values, c);
+            Console.WriteLine("Введите координаты для " + v);
+            o = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine("Введите координаты для " + v);
+            g = Convert.ToInt32(Console.ReadLine());
+
+            if (kartochka(values, o, g,v))
+            {
+                values[o, g] = 1;
+                Count ++;
+            }
+            if (kartoche4ka( values , 1))
+            {
+                kartochka_show(values, c);
+                Console.WriteLine("Вы победили картошечку");
+break;
+            }
+            if (Count == 9)
+            {
+                Console.WriteLine("У вас братская ничья");
+                break;
+            }
+
+            Random rnd = new Random();
+            o = rnd.Next(0, 3);
+            g = rnd.Next(0, 3);
+            int[] vs = new int[2];
+            vs[0] = o;
+            vs[1] = g;
+            vs =  kartochkabot (values, vs );
+            values[vs[0],vs[1]] = 2;
+            Count ++;
+             if(kartoche4ka(values , 2))
+
+            {
+                kartochka_show(values, c);
+                Console.WriteLine("Победил картошечка-бот");
+                break ;
+
+
+            }  if(Count == 9)
+            {
+                Console.WriteLine("У вас братская ничья");
+                break;
+            }
+
+        }
+
+    }
+    static void kartochka_show(int[, ] values , string v)
+    {
+
+        for (int i = 0; i <= 2; i++)
+        {
+            for (int j = 0; j <= 2; j++)
+            { switch (i) 
+                {
+                    case 0:
+                        switch (j) { case 0: Console.ForegroundColor = ConsoleColor.Red; break;
+                            case 1: Console.ForegroundColor = ConsoleColor.Yellow; break;
+                            case 2: Console.ForegroundColor = ConsoleColor.White; break; } break;
+                    case 1:
+                        switch (j)
+                        {
+                            case 0: Console.ForegroundColor = ConsoleColor.Green; break;
+                            case 1: Console.ForegroundColor = ConsoleColor.Cyan; break;
+                            case 2: Console.ForegroundColor = ConsoleColor.Magenta; break;
+                            
+                        }
+                        break;
+                    case 2:
+                        switch (j)
+                        {
+                            case 0: Console.ForegroundColor = ConsoleColor.Blue; break;
+                            case 1: Console.ForegroundColor = ConsoleColor.Gray; break;
+                            case 2: Console.ForegroundColor = ConsoleColor.DarkYellow; break;
+                        }
+                        break;
+                }
+
+
+                if (values[i, j] == 0)
+                {
+                    Console.Write(" - " + "  ");
+
+                }
+
+                if (values[i, j ] == 1)
+                { if( v ==  "крестика")
+                    {
+                          Console.Write( " X " + "  ");
+                    }
+                   
+                   if ( v == "нолика")
+                    {
+                        Console.Write(" 0 " + "  ");
+                    }
+                }
+if (values[i, j] == 2)
+                {
+                    if (v == "крестика")
+                        Console.Write(" 0 " + "  ");
+                    if (v == "нолика")
+                        Console.Write(" X " + "  ");
+                }
+                Console.ResetColor();
+            }
+            Console.WriteLine();
+        }
+    }
+    static bool kartochka(int[,] values, int o, int g, string v)
+    {
+        bool s;
+        if (o < 0  g < 0  o > 2 || g > 2)
+        {
+            Console.WriteLine("Вы неправильно ввели координаты,перепишите");
+            s = false;
+            Console.WriteLine("Введите координаты для " + v);
+            o = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine("Введите координаты для " + v  );
+            g = Convert.ToInt32(Console.ReadLine());
+            kartochka(values, o, g, v);
+
+        }
+        else if (values[o, g] != 0)
+        {
+            Console.WriteLine("Вы неправильно ввели координаты,перепишите");
+            s = false;
+            Console.WriteLine("Введите координаты для " + v);
+            o = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine("Введите координаты для " + v );
+            g = Convert.ToInt32(Console.ReadLine());
+            kartochka(values, o, g , v);
+
+        }
+
+        else
+        {
+         
+            s = true;
+        }
+        return s;
+    }
+    static int [] kartochkabot(int[,] values, int [] vs) 
+    {
+        bool s = false;
+        if (values[vs[0], vs[1]] != 0)
+        {
+          
+             Random rnd = new Random();
+            vs[0] = rnd.Next(0 ,3);
+            vs[1] = rnd.Next(0, 3);
+            kartochkabot(values, vs);
+
+        }
+
+        else
+        {
+
+            s = true;
+        }
+        return vs;
+    }
+    static bool kartoche4ka(int[,] values, int q)
+    {
+        bool rezal = false;
+
+        for (int i = 0; i < 3; i++)
+        {
+            if (values[0, i] == q && values[1, i] == q && values[2, i] == q)
+            {
+                rezal = true; break;
+
+            }
+
+        }
+        for (int i = 0; i < 3; i++)
+        {
+            if (values[i, 0] == q && values[i, 1] == q && values[i,2] == q)
+            {
+                rezal = true; break;
+
+            }
+       
+        } if(values[0, 0] == q && values[1, 1] == q && values[2, 2] == q)
+        {
+            rezal = true;
+        }
+        if (values[0, 2] == q && values[1, 1] == q && values[2, 0] == q)
+        {
+            rezal = true;
+        }
+        return rezal;                                                  
+    }
+
+}
